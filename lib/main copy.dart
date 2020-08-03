@@ -3,7 +3,7 @@ import 'package:probando_flutter/pages/registrar_avance.dart';
 import 'package:probando_flutter/utils/flutter/HexColor.dart';
 
 void main() => runApp(MyApp());
-
+  
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override

@@ -3,26 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:probando_flutter/app/Services/GpsLocation.dart';
 import 'package:probando_flutter/pages/components/tableCalendar.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key}) : super(key: key);
+class HorarioClases extends StatefulWidget {
+  const HorarioClases({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  AnimationController animationController;
+class _MyHomePageState extends State<HorarioClases> with TickerProviderStateMixin {
+  //AnimationController animationController;
   bool multiple = true;
   String geoLocation = "", geoLocation2 = "";
+
   @override
   void initState() {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
+   /* animationController = AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);*/
     _getLocation();
+    
     super.initState();
   }
 
   Future<bool> getData() async {
+    
     await Future<dynamic>.delayed(const Duration(milliseconds: 0));
     return true;
   }
@@ -36,12 +39,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    animationController.dispose();
+    //animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppTheme.white,
@@ -145,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ),
             ),
           ),
-          Padding(
+          /*Padding(
             padding: const EdgeInsets.only(top: 8, right: 8),
             child: Container(
               width: AppBar().preferredSize.height - 8,
@@ -168,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ),
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

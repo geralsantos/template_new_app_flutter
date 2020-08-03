@@ -1,10 +1,14 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:probando_flutter/vistas/listadoClases.dart';
+import 'package:intl/intl.dart';
+import 'package:probando_flutter/app/Models/Clases.dart';
+import 'package:probando_flutter/app/Services/Calendario/CalendarioService.dart';
+import 'package:probando_flutter/vistas/ListadoClases.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 DateTime today = DateTime.now();
-final _selectedDay = today;
+var _selectedDay = today;
 dynamic _week = today.weekday;
 
 class TableCalendarC extends StatefulWidget {
@@ -15,18 +19,56 @@ class TableCalendarC extends StatefulWidget {
 
 class _TableCalendarCState extends State<TableCalendarC> {
   CalendarController _controller;
-  Map<DateTime, List> _events;
+  Map<DateTime, List<Clases>> _events = Map();
   List _selectedEvents;
-
+  List<Clases> clasesList = <Clases>[];
+  DateTime dateDesdeFecha;
+  DateTime dateHastaFecha;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _controller = CalendarController();
-    _events = {
-      _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7']
-    };
-    _selectedEvents = _events[_selectedDay] ?? [];
+
+    HashMap<String, DateTime> datesOfWeek = getDaysOfWeek();
+    dateDesdeFecha = datesOfWeek["fecha_inicio"];
+    dateHastaFecha = datesOfWeek["fecha_fin"];
+    _getDataClases(dateDesdeFecha, dateHastaFecha);
+    //_selectedEvents = _events[_selectedDay] ?? [];
+  }
+
+  HashMap<String, DateTime> getDaysOfWeek() {
+    DateTime _today = today, _todayFin = today;
+    HashMap map1 = new HashMap<String, DateTime>();
+    while (_today.weekday != 1) {
+      _today = _today.subtract(new Duration(days: 1));
+    }
+    while (_todayFin.weekday != 7) {
+      _todayFin = _todayFin.add(new Duration(days: 1));
+    }
+    map1["fecha_inicio"] = _today;
+    map1["fecha_fin"] = _todayFin;
+    return map1;
+  }
+
+  Future<List<Clases>> _getDataClases(
+      DateTime fechaIni, DateTime fechaFin) async {
+    return await calendarioService(fechaIni, fechaFin).then((value) async {
+      _events = {};
+
+      value.forEach((clase) {
+        if (clase.fecha != null && clase.fecha != "") {
+          if (_events[DateTime.parse(clase.fecha.toString())] == null) {
+            _events[DateTime.parse(clase.fecha.toString())] = [];
+          }
+          _events[DateTime.parse(clase.fecha.toString())].add(clase);
+        }
+      });
+      setState(() {
+        clasesList = value;
+      });
+      return value;
+    });
   }
 
   @override
@@ -35,7 +77,7 @@ class _TableCalendarCState extends State<TableCalendarC> {
 
     return Scaffold(
         body: Container(
-      height: size.height-100,
+      height: size.height - 100,
       decoration: BoxDecoration(
         color: Colors.white,
       ),
@@ -48,17 +90,27 @@ class _TableCalendarCState extends State<TableCalendarC> {
             todayColor: Theme.of(context).secondaryHeaderColor,
             selectedColor: Colors.blue[200],
             todayStyle: TextStyle(color: Colors.white),
+            markersColor: Colors.redAccent
           ),
           onDaySelected: (date, events) {
-            print(events);
+            //print(events);
             setState(() {
-              _selectedEvents = events;
+              clasesList = events;
             });
+            /*setState(() {
+              _selectedEvents = events;
+            });*/
           },
           onVisibleDaysChanged: (dateF, dateL, format) {
-            print(dateF);
-            print(dateL);
-            print(format);
+            /*  print(dateF); //datefirst
+            print(dateL); //datelast
+            print(format); //formato (dia, semana, mes) def:semana*/
+            /*setState(() {
+              dateDesdeFecha = dateF;
+              dateHastaFecha = dateL;
+              //_selectedDay = dateF;
+            });*/
+            _getDataClases(dateF, dateL);
           },
           availableCalendarFormats: {
             CalendarFormat.week: "Semana",
@@ -73,7 +125,19 @@ class _TableCalendarCState extends State<TableCalendarC> {
         ),
         Expanded(
             child: Container(
-          child: ListadoClases(),
+          child: ListadoClases(clasesList),
+          /*child: FutureBuilder(
+              future: prueba(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return SizedBox();
+                } else {
+                  print("dateDesdeFecha");
+                  print(dateDesdeFecha);
+                  return ListadoClases(dateDesdeFecha,dateHastaFecha) ;
+                }
+              },
+            ),*/
         ))
       ]),
     ));

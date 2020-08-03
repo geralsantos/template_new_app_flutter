@@ -1,11 +1,13 @@
+import 'dart:convert';
+
 class Clases {
-  Clases({
-    this.id = 0,
-    this.nombre = "",
-    this.hora_inicio = "",
-    this.hora_fin = "",
-    this.fecha = "",
-  });
+  Clases(
+    this.id,
+    this.nombre,
+    this.hora_inicio,
+    this.hora_fin,
+    this.fecha,
+  );
 
   int id;
   String nombre;
@@ -13,38 +15,18 @@ class Clases {
   String hora_fin;
   String fecha;
 
-  static List<Clases> clasesList = <Clases>[
-    Clases(
-      id: 1,
-      nombre: 'Clase de matemáticas',
-      hora_inicio: '10:00',
-      hora_fin: '11:30',
-      fecha: '6 de Julio del 2020',
+  static List<Clases> parseData(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Clases>((json) => Clases.fromMap(json)).toList();
+  }
 
-    ), 
-    Clases(
-      id: 2,
-      nombre: 'Clase de Tecnología y Comunicación',
-      hora_inicio: '10:00',
-      hora_fin: '11:30',
-      fecha: '7 de Julio del 2020',
-    ), 
-    Clases(
-      id: 3,
-      nombre: 'Clase de Inglés 2',
-      hora_inicio: '10:00',
-      hora_fin: '11:30',
-      fecha: '8 de Julio del 2020',
-
-    ),
-    Clases(
-      id: 4,
-      nombre: 'Clase de Computación 2',
-      hora_inicio: '10:00',
-      hora_fin: '11:30',
-      fecha: '9 de Julio del 2020',
-
-    ),
-  ];
- 
+  factory Clases.fromMap(Map<String, dynamic> json) {
+    return Clases(
+      json["id"],
+      json["nombre"],
+      json["hora_inicio"],
+      json["hora_fin"],
+      json["fecha"],
+    );
+  }
 }

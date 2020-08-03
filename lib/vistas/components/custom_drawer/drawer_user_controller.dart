@@ -15,12 +15,12 @@ class DrawerUserController extends StatefulWidget {
   }) : super(key: key);
 
   final double drawerWidth;
-  final Function(DrawerIndex) onDrawerCall;
+  final Function(int) onDrawerCall;
   final Widget screenView;
   final Function(bool) drawerIsOpen;
   final AnimatedIconData animatedIconData;
   final Widget menuView;
-  final DrawerIndex screenIndex;
+  final int screenIndex;
 
   @override
   _DrawerUserControllerState createState() => _DrawerUserControllerState();
@@ -104,7 +104,7 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                       child: HomeDrawer(
                         screenIndex: widget.screenIndex == null ? DrawerIndex.HOME : widget.screenIndex,
                         iconAnimationController: iconAnimationController,
-                        callBackIndex: (DrawerIndex indexType) {
+                        callBackIndex: (int indexType) {
                           onDrawerClick();
                           try {
                             widget.onDrawerCall(indexType);

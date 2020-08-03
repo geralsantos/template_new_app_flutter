@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:probando_flutter/login/onboardingScreen/onboarding.dart';
 import 'dart:async';
-import 'package:probando_flutter/navigation_home_screen.dart';
+import 'package:probando_flutter/navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key}) : super(key: key);
@@ -14,23 +14,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    /*_checkSessionAuth().then(
+    _checkSessionAuth().then(
     (value) 
     {
-      _navigateHome(value?"home":"presentationApp");
+      //_navigateHome(value?"home":"presentationApp");
+    //  _navigateHome("home");
     }
-  );*/
+  );
   }
 
   Future<bool> _checkSessionAuth() async {
-    await Future.delayed(Duration(milliseconds: 1500), () {});
+    await Future.delayed(Duration(milliseconds: 5000), () {});
     return true; //cambiar por si está auth
   }
 
   void _navigateHome(String route) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) =>
-            route == "home" ? OnboardingScreen() : ""));
+        builder: (BuildContext context) => OnboardingScreen()));
   }
 
   @override
@@ -87,17 +87,17 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Desarrollado por lgsoftwareweb.com",
+                    Text("LGSoftwareweb.com",
                       style: TextStyle(
-                        color:Colors.white,
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                        color:Colors.white,fontFamily: 'QuickSand'
                       ),
                     ),
-                    /*CircularProgressIndicator(
+                    SizedBox(height: 20,),
+                    CircularProgressIndicator(
                       valueColor:
                           new AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),*/
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
                     )
                   ],
                 ),

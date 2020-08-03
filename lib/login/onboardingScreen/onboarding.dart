@@ -35,8 +35,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void login() {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => LoginThreePage()));
+   /* Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => LoginThreePage()));*/
+Navigator.pushReplacementNamed(context, '/login');
+       // Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override

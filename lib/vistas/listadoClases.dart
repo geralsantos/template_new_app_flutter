@@ -1,27 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:probando_flutter/app/Models/Clases.dart';
-import 'package:probando_flutter/utils/flutter/HexColor.dart';
+import 'package:probando_flutter/app/Services/Calendario/CalendarioService.dart';
+
+final formatoFecha = new DateFormat('EEEE d');
 
 class ListadoClases extends StatefulWidget {
-  const ListadoClases({Key key}) : super(key: key);
+  List<Clases> clasesList;
+
+  ListadoClases(this.clasesList, {Key key})
+      : super(key: key);
+
   @override
-  LListadoClasesState createState() => LListadoClasesState();
+  LListadoClasesState createState() =>
+      LListadoClasesState(this.clasesList);
 }
 
 class LListadoClasesState extends State<ListadoClases>
     with TickerProviderStateMixin {
   AnimationController animationController;
+  List<Clases> clasesList;
+
+  LListadoClasesState(this.clasesList);
 
   @override
   void initState() {
     animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
+        duration: const Duration(milliseconds: 500), vsync: this);
     super.initState();
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
+  Future<List<Clases>> _getDataClases() async {
+    if (widget.clasesList!=null) {
+      animationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+      return widget.clasesList;
+    }
+    return null;
+    
   }
 
   @override
@@ -31,9 +47,10 @@ class LListadoClasesState extends State<ListadoClases>
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(top: 8),
-        child: FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        child: FutureBuilder<List<Clases>>(
+          future: _getDataClases(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Clases>> snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
@@ -43,9 +60,9 @@ class LListadoClasesState extends State<ListadoClases>
                 child: SingleChildScrollView(
                   child: Column(
                       children: List<Widget>.generate(
-                    Clases.clasesList.length,
+                    snapshot.data.length,
                     (int index) {
-                      final int count = Clases.clasesList.length;
+                      final int count = snapshot.data.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
@@ -57,9 +74,10 @@ class LListadoClasesState extends State<ListadoClases>
                       animationController.forward();
                       return Container(
                         padding: EdgeInsets.all(10.0),
+                        
                         child: ClasesView(
                           callback: () {},
-                          clases: Clases.clasesList[index],
+                          clases: snapshot.data[index],
                           animation: animation,
                           animationController: animationController,
                         ),
@@ -113,11 +131,14 @@ class ClasesView extends StatelessWidget {
               height: 150,
               child: Material(
                   borderRadius: BorderRadius.circular(12.0),
+                  color : Colors.white,
                   child: Container(
+                    
                     child: Column(
                       children: <Widget>[
                         Expanded(
                           child: Container(
+                            
                             child: Column(
                               children: <Widget>[
                                 Expanded(
@@ -126,10 +147,11 @@ class ClasesView extends StatelessWidget {
                                     print("wwwww");
                                   },
                                   child: Container(
+                                    
                                     child: Column(
                                       children: <Widget>[
                                         Padding(
-                                          padding: const EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                               top: 16, left: 16, right: 16),
                                           child: Column(
                                             mainAxisAlignment:
@@ -143,7 +165,7 @@ class ClasesView extends StatelessWidget {
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: 16,
+                                                  fontSize: 18,
                                                   letterSpacing: 0.27,
                                                   color: Colors.black,
                                                 ),
@@ -177,9 +199,8 @@ class ClasesView extends StatelessWidget {
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w200,
-                                                        fontSize: 12,
+                                                        fontSize: 17,
                                                         letterSpacing: 0.27,
-                                                        color: Colors.grey,
                                                       ),
                                                     ),
                                                   ],
@@ -202,9 +223,8 @@ class ClasesView extends StatelessWidget {
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w200,
-                                                        fontSize: 12,
+                                                        fontSize: 17,
                                                         letterSpacing: 0.27,
-                                                        color: Colors.grey,
                                                       ),
                                                     ),
                                                   ],
@@ -222,6 +242,8 @@ class ClasesView extends StatelessWidget {
                                           child: Row(
                                             children: <Widget>[
                                               Container(
+                                                
+                                                
                                                 child: Row(
                                                   children: <Widget>[
                                                     Icon(
@@ -229,7 +251,16 @@ class ClasesView extends StatelessWidget {
                                                       color: Colors.blue,
                                                       size: 20,
                                                     ),
-                                                     Text(" ${clases.fecha}")
+                                                   Container(
+                                                     width: 150,
+                                                     child:  Text(
+                                                        ' ${formatoFecha.format(DateTime.parse(clases.fecha)).toUpperCase()}',
+                                                        style: TextStyle(
+                                                        fontSize: 17,
+                                                        letterSpacing: 0.27,
+                                                      ),
+                                                      ),
+                                                   )
                                                   ],
                                                 ),
                                               )

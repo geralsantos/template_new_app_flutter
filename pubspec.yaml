@@ -27,8 +27,13 @@ dependencies:
   table_calendar: ^2.2.3
   location: ^3.0.2
   wave: ^0.0.8
-  shared_preferences: ^0.5.7+3
+  shared_preferences: ^0.5.8
   smooth_star_rating: ^1.0.3
+  material_design_icons_flutter: ^4.0.5345
+  sweetalert: ^0.0.1
+  rflutter_alert: ^1.0.2
+  intl: ^0.16.1
+  timezone: ^0.5.7
 dev_dependencies:
   flutter_test:
     sdk: flutter

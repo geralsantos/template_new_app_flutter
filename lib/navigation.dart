@@ -1,6 +1,7 @@
 import 'package:probando_flutter/app_theme.dart';
+import 'package:probando_flutter/pages/Inicio.dart';
 import 'package:probando_flutter/vistas/components/custom_drawer/drawer_user_controller.dart';
-import 'package:probando_flutter/home_screen.dart';
+import 'package:probando_flutter/pages/HorarioClases.dart';
 import 'package:probando_flutter/vistas/components/custom_drawer/home_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +12,12 @@ class NavigationHomeScreen extends StatefulWidget {
 
 class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   Widget screenView;
-  DrawerIndex drawerIndex;
+  int drawerIndex;
 
   @override
   void initState() {
-    drawerIndex = DrawerIndex.HOME;
-    screenView = const MyHomePage();
+    drawerIndex = 0;
+    screenView =  Inicio();
     super.initState();
   }
 
@@ -32,7 +33,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           body: DrawerUserController(
             screenIndex: drawerIndex,
             drawerWidth: MediaQuery.of(context).size.width * 0.75,
-            onDrawerCall: (DrawerIndex drawerIndexdata) {
+            onDrawerCall: (int drawerIndexdata) {
               changeIndex(drawerIndexdata);
               //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
             },
@@ -44,25 +45,38 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     );
   }
 
-  void changeIndex(DrawerIndex drawerIndexdata) {
+  void changeIndex(int drawerIndexdata) {
     if (drawerIndex != drawerIndexdata) {
       drawerIndex = drawerIndexdata;
-      if (drawerIndex == DrawerIndex.HOME) {
-        setState(() {
-          screenView = const MyHomePage();
-        });
-      } else if (drawerIndex == DrawerIndex.Help) {
-        setState(() {
-        });
-      } else if (drawerIndex == DrawerIndex.FeedBack) {
-        setState(() {
-        });
-      } else if (drawerIndex == DrawerIndex.Invite) {
-        setState(() {
-        });
-      } else {
-        //do in your way......
+      switch (drawerIndex) {
+        case 0:
+          setState(() {
+            screenView = Inicio();
+          });
+          break;
+        case 1:
+          setState(() {
+            //screenView =  Inicio();
+          });
+          break;
+        case 2:
+          setState(() {
+            screenView = const HorarioClases();
+          });
+          break;
+        case 3:
+          setState(() {
+            //screenView = const HorarioClases();
+          });
+          break;
+        case 4:
+          setState(() {
+           // screenView = const HorarioClases();
+          });
+          break;
+        default:
       }
+      
     }
   }
 }
