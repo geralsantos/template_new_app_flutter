@@ -1,6 +1,6 @@
 # probando
 
-A new Flutter project.
+Esto va a servir como punto de partida para realizar una nueva app
 
 ## Getting Started
 
